@@ -1,8 +1,9 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
-import { registerUserUseCase } from '@/use-cases/register'
+import { CreateUserUseCase } from '@/use-cases/register'
+import { PrismaCreateUserRepository } from '@/repositories/prisma/prisma-user-repository'
 
-export async function registerUserController(
+export async function CreateUserController(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
@@ -15,7 +16,10 @@ export async function registerUserController(
 
     const { name, email, password } = registerBodySchema.parse(request.body)
 
-    await registerUserUseCase({
+    const createUserRepository = new PrismaCreateUserRepository()
+    const createUserUseCase = new CreateUserUseCase(createUserRepository)
+
+    await createUserUseCase.execute({
       name,
       email,
       password,
