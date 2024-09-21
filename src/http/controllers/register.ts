@@ -10,9 +10,23 @@ export async function CreateUserController(
 ) {
   try {
     const registerBodySchema = z.object({
-      name: z.string(),
-      email: z.string().email(),
-      password: z.string().min(8),
+      name: z
+        .string({
+          required_error: 'Name is required',
+        })
+        .min(2),
+      email: z
+        .string({
+          required_error: 'E-mail is required.',
+        })
+        .email({
+          message: 'Invalid e-mail.',
+        }),
+      password: z
+        .string({
+          required_error: 'Password is required.',
+        })
+        .min(8),
     })
 
     const { name, email, password } = registerBodySchema.parse(request.body)
@@ -33,7 +47,5 @@ export async function CreateUserController(
     }
 
     throw err
-
-    return reply.status(500).send() // TODO: Fix Me
   }
 }
