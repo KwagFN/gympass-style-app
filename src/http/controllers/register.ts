@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 import { CreateUserUseCase } from '@/use-cases/register'
-import { PrismaCreateUserRepository } from '@/repositories/prisma/prisma-user-repository'
+import { PrismaUsersRepository } from '@/repositories/prisma/prisma-user-repository'
 import { UserAlreadyExistsError } from '@/use-cases/errors/user-already-exists-error'
 
 export async function CreateUserController(
@@ -31,7 +31,7 @@ export async function CreateUserController(
 
     const { name, email, password } = registerBodySchema.parse(request.body)
 
-    const createUserRepository = new PrismaCreateUserRepository()
+    const createUserRepository = new PrismaUsersRepository()
     const createUserUseCase = new CreateUserUseCase(createUserRepository)
 
     await createUserUseCase.execute({
