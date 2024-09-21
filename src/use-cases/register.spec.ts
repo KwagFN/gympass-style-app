@@ -5,6 +5,19 @@ import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memmory-use
 import { UserAlreadyExistsError } from './errors/user-already-exists-error'
 
 describe('Create User Use Case', () => {
+  it('should be able to register', async () => {
+    const inMemoryUsersRepository = new InMemoryUsersRepository()
+    const createUserUseCase = new CreateUserUseCase(inMemoryUsersRepository)
+
+    const { user } = await createUserUseCase.execute({
+      name: 'John Doe',
+      email: 'john@email.com',
+      password: '1234567890',
+    })
+
+    expect(user.id).toEqual(expect.any(String))
+  })
+
   it('should hash user password upon registration', async () => {
     const inMemoryUsersRepository = new InMemoryUsersRepository()
     const createUserUseCase = new CreateUserUseCase(inMemoryUsersRepository)
