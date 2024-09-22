@@ -1,6 +1,7 @@
 import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memmory-users-repository'
 import { GetUserProfileUseCase } from './get-user-profile'
 import { beforeEach, describe, expect, it } from 'vitest'
+import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
 let usersRepository: InMemoryUsersRepository
 let sut: GetUserProfileUseCase
@@ -23,5 +24,13 @@ describe('Get User Profile', () => {
     })
 
     expect(user.name).toEqual('John Doe')
+  })
+
+  it('should not be able to get user profile with wrong id', async () => {
+    await expect(() =>
+      sut.execute({
+        userId: 'not-exists-id',
+      }),
+    ).rejects.toBeInstanceOf(ResourceNotFoundError)
   })
 })
