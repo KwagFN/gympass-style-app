@@ -8,6 +8,5 @@ export async function appRoutes(app: FastifyInstance) {
   app.post('/users', CreateUserController)
   app.post('/sessions', AuthenticateUserController)
 
-  // Authenticated
   app.get('/me', { onRequest: [verifyJWT] }, ProfileController)
 }
